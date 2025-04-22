@@ -31,7 +31,7 @@ func Test_ReadNum(t *testing.T) {
 func Test_ReadBulk(t *testing.T) {
 	strR := strings.NewReader("5\r\nhello\r\n")
 	reader := NewReader(strR)
-	bulk, _ := reader.readBulk()
+	bulk, _ := reader.ReadBulk()
 	if bulk.typ != "bulk" || bulk.bulk != "hello" {
 		t.Fatal("wrong")
 	}
@@ -40,7 +40,7 @@ func Test_ReadBulk(t *testing.T) {
 func Test_ReadArray(t *testing.T) {
 	strR := strings.NewReader("2\r\n$5\r\nhello\r\n$3\r\nyou\r\n")
 	reader := NewReader(strR)
-	array, _ := reader.readArray()
+	array, _ := reader.ReadArray()
 	if array.Type() != "array" || len(array.array) != 2 || array.array[0].Type() != "bulk" ||
 		array.array[1].Type() != "bulk" {
 		t.Fatal("wrong")

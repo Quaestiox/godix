@@ -27,8 +27,18 @@ func main() {
 			fmt.Println(err)
 			return
 		}
-		fmt.Println(value)
+		if value.Type() != "array" {
+			fmt.Println("Invalid request, expected array")
+			continue
+		}
+		arr := value.Value().([]resp.Val)
+		res, err := HandleRequest(arr)
+		if err != nil && err.Error() != "Invalid command.\n" {
+			fmt.Println(err)
+			continue
+		}
+		fmt.Println(res)
 		writer := resp.NewWriter(conn)
-		writer.Write(resp.NewString("OK"))
+		writer.Write(res)
 	}
 }

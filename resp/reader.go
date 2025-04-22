@@ -23,9 +23,9 @@ func (r *Reader) Read() (Val, error) {
 
 	switch typ {
 	case BULK:
-		return r.readBulk()
+		return r.ReadBulk()
 	case ARRAY:
-		return r.readArray()
+		return r.ReadArray()
 	default:
 		fmt.Printf("Unknown type: %v", string(typ))
 		return &Err{msg: "Unknown type:" + string(typ)}, nil
@@ -33,7 +33,7 @@ func (r *Reader) Read() (Val, error) {
 
 }
 
-func (r *Reader) readArray() (*Array, error) {
+func (r *Reader) ReadArray() (*Array, error) {
 	v := NewArray()
 	length, _, err := r.readNum()
 	if err != nil {
@@ -50,7 +50,7 @@ func (r *Reader) readArray() (*Array, error) {
 	return v, nil
 }
 
-func (r *Reader) readBulk() (*Bulk, error) {
+func (r *Reader) ReadBulk() (*Bulk, error) {
 	v := NewBulk("")
 	num, _, err := r.readNum()
 	if err != nil {

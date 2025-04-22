@@ -5,6 +5,7 @@ import "strconv"
 type Val interface {
 	Marshal() []byte
 	Type() string
+	Value() any
 }
 
 type String struct {
@@ -28,6 +29,10 @@ func (s *String) Marshal() (bytes []byte) {
 
 func (s *String) Type() string {
 	return s.typ
+}
+
+func (s *String) Value() any {
+	return s.str
 }
 
 type Bulk struct {
@@ -55,6 +60,10 @@ func (b *Bulk) Type() string {
 	return b.typ
 }
 
+func (b *Bulk) Value() any {
+	return b.bulk
+}
+
 type Array struct {
 	typ   string
 	array []Val
@@ -66,6 +75,10 @@ func NewArray(values ...Val) *Array {
 		typ:   "array",
 		array: values,
 	}
+}
+
+func (arr *Array) Value() any {
+	return arr.array
 }
 
 func (arr *Array) Marshal() (bytes []byte) {
@@ -85,18 +98,34 @@ func (arr *Array) Type() string {
 }
 
 type Err struct {
-	msg string
+	typ    string
+	prefix string
+	msg    string
+}
+
+func NewError(prefix, msg string) *Err {
+	return &Err{
+		typ:    "error",
+		prefix: prefix,
+		msg:    msg,
+	}
 }
 
 func (e *Err) Marshal() (bytes []byte) {
 	bytes = append(bytes, ERROR)
+	bytes = append(bytes, e.prefix...)
+	bytes = append(bytes, ' ')
 	bytes = append(bytes, e.msg...)
 	bytes = append(bytes, '\r', '\n')
 	return
 }
 
 func (e *Err) Type() string {
-	return ""
+	return e.typ
+}
+
+func (e *Err) Value() any {
+	return e.msg
 }
 
 type Null struct {
@@ -116,4 +145,8 @@ func (n *Null) Type() string {
 func (n *Null) Marshal() (bytes []byte) {
 	bytes = append(bytes, []byte("_/r/n")...)
 	return
+}
+
+func (n *Null) Value() any {
+	return nil
 }
