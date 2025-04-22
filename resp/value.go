@@ -2,6 +2,34 @@ package resp
 
 import "strconv"
 
+type Val interface {
+	Marshal() []byte
+	Type() string
+}
+
+type String struct {
+	typ string
+	str string
+}
+
+func NewString(str string) *String {
+	return &String{
+		typ: "string",
+		str: str,
+	}
+}
+
+func (s *String) Marshal() (bytes []byte) {
+	bytes = append(bytes, STRING)
+	bytes = append(bytes, s.str...)
+	bytes = append(bytes, '\r', '\n')
+	return
+}
+
+func (s *String) Type() string {
+	return s.typ
+}
+
 type Bulk struct {
 	typ  string
 	bulk string
@@ -71,7 +99,21 @@ func (e *Err) Type() string {
 	return ""
 }
 
-type Val interface {
-	Marshal() []byte
-	Type() string
+type Null struct {
+	typ string
+}
+
+func NewNull() *Null {
+	return &Null{
+		typ: "null",
+	}
+}
+
+func (n *Null) Type() string {
+	return n.typ
+}
+
+func (n *Null) Marshal() (bytes []byte) {
+	bytes = append(bytes, []byte("_/r/n")...)
+	return
 }

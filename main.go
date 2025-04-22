@@ -21,13 +21,14 @@ func main() {
 	defer conn.Close()
 
 	for {
-		resp := resp.NewReader(conn)
-		value, err := resp.Read()
+		reader := resp.NewReader(conn)
+		value, err := reader.Read()
 		if err != nil {
 			fmt.Println(err)
 			return
 		}
 		fmt.Println(value)
-		conn.Write([]byte("+omg\r\n"))
+		writer := resp.NewWriter(conn)
+		writer.Write(resp.NewString("OK"))
 	}
 }
