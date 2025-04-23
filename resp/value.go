@@ -143,10 +143,61 @@ func (n *Null) Type() string {
 }
 
 func (n *Null) Marshal() (bytes []byte) {
-	bytes = append(bytes, []byte("_/r/n")...)
+	bytes = append(bytes, NULL)
+	bytes = append(bytes, []byte("\r\n")...)
 	return
 }
 
 func (n *Null) Value() any {
+	return nil
+}
+
+type NullBulk struct {
+	typ string
+}
+
+func NewNullBulk() *NullBulk {
+	return &NullBulk{
+		typ: "null",
+	}
+}
+
+func (n *NullBulk) Type() string {
+	return n.typ
+}
+
+func (n *NullBulk) Marshal() (bytes []byte) {
+	bytes = append(bytes, BULK)
+	bytes = append(bytes, "-1"...)
+	bytes = append(bytes, []byte("\r\n")...)
+	return
+}
+
+func (n *NullBulk) Value() any {
+	return nil
+}
+
+type NullArray struct {
+	typ string
+}
+
+func NewNullArray() *NullArray {
+	return &NullArray{
+		typ: "null",
+	}
+}
+
+func (n *NullArray) Type() string {
+	return n.typ
+}
+
+func (n *NullArray) Marshal() (bytes []byte) {
+	bytes = append(bytes, ARRAY)
+	bytes = append(bytes, "-1"...)
+	bytes = append(bytes, []byte("\r\n")...)
+	return
+}
+
+func (n *NullArray) Value() any {
 	return nil
 }

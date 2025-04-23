@@ -6,4 +6,5 @@ const (
 	INTERGE = ':'
 	BULK    = '$'
 	ARRAY   = '*'
+	NULL    = '_'
 )

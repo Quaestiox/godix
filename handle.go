@@ -2,18 +2,15 @@ package main
 
 import (
 	"fmt"
+	"github.com/Quaestiox/godix/command"
 	"github.com/Quaestiox/godix/resp"
 	"strings"
 )
 
-type Args []resp.Val
-
-var Handlers = map[string]func(Args) resp.Val{
-	"PING": ping,
-}
-
-func ping(args Args) resp.Val {
-	return resp.NewString("PONG")
+var Handlers = map[string]func(command.Args) resp.Val{
+	"PING": command.Ping,
+	"SET":  command.Set,
+	"GET":  command.Get,
 }
 
 func HandleRequest(arr []resp.Val) (resp.Val, error) {
