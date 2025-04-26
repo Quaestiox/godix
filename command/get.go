@@ -1,8 +1,11 @@
 package command
 
-import "github.com/Quaestiox/godix/resp"
+import (
+	"github.com/Quaestiox/godix/cfg"
+	"github.com/Quaestiox/godix/resp"
+)
 
-func Get(args Args) resp.Val {
+func Get(args Args, config cfg.Config) resp.Val {
 	if len(args) != 1 {
 		return resp.NewError("ERR", "wrong number of arguments for 'set' command.")
 	}

@@ -1,8 +1,11 @@
 package command
 
-import "github.com/Quaestiox/godix/resp"
+import (
+	"github.com/Quaestiox/godix/cfg"
+	"github.com/Quaestiox/godix/resp"
+)
 
-func HGet(args Args) resp.Val {
+func HGet(args Args, config cfg.Config) resp.Val {
 	if len(args) != 2 {
 		return resp.NewError("ERR", "wrong number of arguments for 'hget' command.")
 	}

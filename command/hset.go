@@ -1,6 +1,7 @@
 package command
 
 import (
+	"github.com/Quaestiox/godix/cfg"
 	"github.com/Quaestiox/godix/resp"
 	"sync"
 )
@@ -8,7 +9,7 @@ import (
 var HMap = map[string]map[string]string{}
 var HMapLock = sync.RWMutex{}
 
-func HSet(args Args) resp.Val {
+func HSet(args Args, config cfg.Config) resp.Val {
 	if len(args) != 3 {
 		return resp.NewError("ERR", "wrong number of arguments for 'hset' command.")
 	}

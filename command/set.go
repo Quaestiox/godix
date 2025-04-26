@@ -1,6 +1,7 @@
 package command
 
 import (
+	"github.com/Quaestiox/godix/cfg"
 	"github.com/Quaestiox/godix/resp"
 	"sync"
 )
@@ -8,7 +9,7 @@ import (
 var Map = map[string]string{}
 var MapLock = sync.RWMutex{}
 
-func Set(args Args) resp.Val {
+func Set(args Args, config cfg.Config) resp.Val {
 	if len(args) != 2 {
 		return resp.NewError("ERR", "wrong number of arguments for 'set' command.")
 	}

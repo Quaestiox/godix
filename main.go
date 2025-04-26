@@ -2,15 +2,20 @@ package main
 
 import (
 	"fmt"
+	"github.com/Quaestiox/godix/cfg"
+
 	"github.com/Quaestiox/godix/persistence"
 	"github.com/Quaestiox/godix/resp"
 	"net"
 )
 
-var aofOn = true
+var config cfg.Config
 
 func main() {
-	var aof *persistence.AOF
+	Banner()
+
+	config.Init()
+
 	// godix server
 	fmt.Println("Listening on port :6379")
 	l, err := net.Listen("tcp", ":6379")
@@ -20,16 +25,16 @@ func main() {
 	}
 
 	// aof
-	if aofOn {
-		aof, err = persistence.NewAOF("godix.aof")
+	if config.AofOn {
+		config.Aof, err = persistence.NewAOF(config.AofPath)
 		if err != nil {
 			fmt.Println(err)
 			return
 		}
-		defer aof.Close()
+		defer config.Aof.Close()
 	}
 
-	err = HandleAOF(aof)
+	err = HandleAOF(config.Aof)
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -45,7 +50,6 @@ func main() {
 	for {
 		reader := resp.NewReader(conn)
 		value, err := reader.Read()
-		fmt.Println(value)
 		if err != nil {
 			fmt.Println(err)
 			return
@@ -54,7 +58,7 @@ func main() {
 			fmt.Println("Invalid request, expected array")
 			continue
 		}
-		res, err := HandleRequest(value, aof)
+		res, err := HandleRequest(value, config.Aof)
 		if err != nil && err.Error() != "Invalid command.\n" {
 			fmt.Println(err)
 			continue

@@ -11,17 +11,19 @@ import (
 )
 
 type AOF struct {
+	path   string
 	file   *os.File
 	reader *bufio.Reader
 	mu     sync.Mutex
 }
 
 func NewAOF(path string) (*AOF, error) {
-	f, err := os.OpenFile(path, os.O_CREATE|os.O_RDWR|os.O_APPEND, 0666)
+	f, err := os.OpenFile(path, os.O_CREATE|os.O_RDWR, 0666)
 	if err != nil {
 		return nil, err
 	}
 	aof := &AOF{
+		path:   path,
 		file:   f,
 		reader: bufio.NewReader(f),
 	}
@@ -74,5 +76,23 @@ func (aof *AOF) Read(callback func(value resp.Val)) error {
 		callback(value)
 
 	}
+	return nil
+}
+
+func (aof *AOF) Path() string {
+	return aof.path
+}
+
+func (aof *AOF) Clean() error {
+	aof.mu.Lock()
+	err := aof.file.Truncate(0)
+	if err != nil {
+		return err
+	}
+	aof.file.Seek(0, 0)
+	if err != nil {
+		return err
+	}
+	aof.mu.Unlock()
 	return nil
 }
