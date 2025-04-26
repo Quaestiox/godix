@@ -19,7 +19,7 @@ func HGet(args Args, config cfg.Config) resp.Val {
 
 	value, ok := HMap[hash][key]
 	if !ok {
-		return resp.NewNull()
+		return resp.NewNullBulk()
 	}
 	return resp.NewBulk(value)
 

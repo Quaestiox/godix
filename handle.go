@@ -14,10 +14,13 @@ var Handlers = map[string]func(command.Args, cfg.Config) resp.Val{
 	"PING":  command.Ping,
 	"SET":   command.Set,
 	"GET":   command.Get,
+	"DEL":   command.Del,
 	"HSET":  command.HSet,
 	"HGET":  command.HGet,
+	"HDEL":  command.HDel,
 	"AOF":   command.AOF,
 	"ABOUT": command.About,
+	"ECHO":  command.Echo,
 }
 
 func HandleRequest(value resp.Val, aof *persistence.AOF) (resp.Val, error) {

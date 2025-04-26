@@ -201,3 +201,30 @@ func (n *NullArray) Marshal() (bytes []byte) {
 func (n *NullArray) Value() any {
 	return nil
 }
+
+type Integer struct {
+	typ string
+	num int
+}
+
+func NewInteger(num int) *Integer {
+	return &Integer{
+		typ: "integer",
+		num: num,
+	}
+}
+
+func (i *Integer) Type() string {
+	return i.typ
+}
+
+func (i *Integer) Marshal() (bytes []byte) {
+	bytes = append(bytes, INTERGE)
+	bytes = append(bytes, strconv.Itoa(i.num)...)
+	bytes = append(bytes, []byte("\r\n")...)
+	return
+}
+
+func (i *Integer) Value() any {
+	return i.num
+}

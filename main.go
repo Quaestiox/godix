@@ -17,8 +17,8 @@ func main() {
 	config.Init()
 
 	// godix server
-	fmt.Println("Listening on port :6379")
-	l, err := net.Listen("tcp", ":6379")
+	fmt.Println("Listening on port :" + config.Port)
+	l, err := net.Listen("tcp", ":"+config.Port)
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -63,7 +63,6 @@ func main() {
 			fmt.Println(err)
 			continue
 		}
-		fmt.Println(res)
 		writer := resp.NewWriter(conn)
 		writer.Write(res)
 	}
