@@ -13,6 +13,8 @@ var Handlers = map[string]func(command.Args) resp.Val{
 	"PING": command.Ping,
 	"SET":  command.Set,
 	"GET":  command.Get,
+	"HSET": command.HSet,
+	"HGET": command.HGet,
 }
 
 func HandleRequest(value resp.Val, aof *persistence.AOF) (resp.Val, error) {

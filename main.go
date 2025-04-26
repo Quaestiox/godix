@@ -34,7 +34,7 @@ func main() {
 		fmt.Println(err)
 		return
 	}
-	
+
 	conn, err := l.Accept()
 	if err != nil {
 		fmt.Println(err)
@@ -45,6 +45,7 @@ func main() {
 	for {
 		reader := resp.NewReader(conn)
 		value, err := reader.Read()
+		fmt.Println(value)
 		if err != nil {
 			fmt.Println(err)
 			return
