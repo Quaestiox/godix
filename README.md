@@ -2,20 +2,9 @@
 
 Simple redis-like database implemented in Go.
 
-## Support Commands
+## Supported Commands
 
-- echo
-- set
-- get
-- del
-- expire
-- ttl
-- hset
-- aof 
-  - clean
-
-... *view all commands in command/README.md*
-
+view all commands: [command/README.md](https://github.com/Quaestiox/godix/blob/master/command/README.md)
 
 ## Config
 AOF is enabled by default. You can disable AOF data persistence by argument `aof`:
