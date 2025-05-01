@@ -47,6 +47,8 @@ func main() {
 	}
 	defer conn.Close()
 
+	go HandleExpire()
+
 	for {
 		reader := resp.NewReader(conn)
 		value, err := reader.Read()

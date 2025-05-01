@@ -11,10 +11,10 @@ func Get(args Args, config cfg.Config) resp.Val {
 	}
 	key := args[0]
 	MapLock.RLock()
-	value, ok := Map[key.Value().(string)]
+	sv, ok := Map[key.Value().(string)]
 	MapLock.RUnlock()
 	if !ok {
 		return resp.NewNullBulk()
 	}
-	return resp.NewBulk(value)
+	return resp.NewBulk(sv.Value())
 }

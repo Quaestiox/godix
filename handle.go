@@ -8,19 +8,21 @@ import (
 	"github.com/Quaestiox/godix/resp"
 	"slices"
 	"strings"
+	"time"
 )
 
 var Handlers = map[string]func(command.Args, cfg.Config) resp.Val{
-	"PING":  command.Ping,
-	"SET":   command.Set,
-	"GET":   command.Get,
-	"DEL":   command.Del,
-	"HSET":  command.HSet,
-	"HGET":  command.HGet,
-	"HDEL":  command.HDel,
-	"AOF":   command.AOF,
-	"ABOUT": command.About,
-	"ECHO":  command.Echo,
+	"PING":   command.Ping,
+	"SET":    command.Set,
+	"GET":    command.Get,
+	"DEL":    command.Del,
+	"HSET":   command.HSet,
+	"HGET":   command.HGet,
+	"HDEL":   command.HDel,
+	"AOF":    command.AOF,
+	"ABOUT":  command.About,
+	"ECHO":   command.Echo,
+	"EXPIRE": command.Expire,
 }
 
 func HandleRequest(value resp.Val, aof *persistence.AOF) (resp.Val, error) {
@@ -61,4 +63,19 @@ func HandleAOF(aof *persistence.AOF) error {
 		args := arr[1:]
 		handler(args, config)
 	})
+}
+
+func HandleExpire() {
+	ticker := time.NewTicker(time.Second)
+	defer ticker.Stop()
+	for range ticker.C {
+		command.MapLock.Lock()
+		now := time.Now()
+		for k, sv := range command.Map {
+			if !sv.Expire().IsZero() && now.After(sv.Expire()) {
+				delete(command.Map, k)
+			}
+		}
+		command.MapLock.Unlock()
+	}
 }

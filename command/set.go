@@ -6,7 +6,8 @@ import (
 	"sync"
 )
 
-var Map = map[string]string{}
+// var Map = map[string]string{}
+var Map = map[string]*sv{}
 var MapLock = sync.RWMutex{}
 
 func Set(args Args, config cfg.Config) resp.Val {
@@ -22,7 +23,7 @@ func Set(args Args, config cfg.Config) resp.Val {
 	}
 
 	MapLock.Lock()
-	Map[key.Value().(string)] = value.Value().(string)
+	Map[key.Value().(string)] = NewSV(value.Value().(string))
 	MapLock.Unlock()
 
 	return resp.NewString("OK")
