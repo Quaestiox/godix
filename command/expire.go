@@ -28,7 +28,11 @@ func Expire(args Args, config cfg.Config) resp.Val {
 	}
 
 	MapLock.Lock()
-	sv := Map[key]
+	sv, ok := Map[key]
+	if !ok {
+		MapLock.Unlock()
+		return resp.NewInteger(0)
+	}
 	d := time.Duration(duration) * time.Second
 	sv.setExpire(d)
 	MapLock.Unlock()
@@ -37,6 +41,6 @@ func Expire(args Args, config cfg.Config) resp.Val {
 	ExpireRecord[key] = time.Now().Add(d)
 	ExpireRecordLock.Unlock()
 
-	return resp.NewString("OK")
+	return resp.NewInteger(1)
 
 }

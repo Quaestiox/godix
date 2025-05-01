@@ -15,8 +15,12 @@ func Rename(args Args, config cfg.Config) resp.Val {
 
 	MapLock.Lock()
 	sv, ok := Map[key]
-	Map[newkey] = sv
+	if !ok {
+		MapLock.Unlock()
+		return resp.NewNullBulk()
+	}
 	delete(Map, key)
+	Map[newkey] = sv
 	MapLock.Unlock()
 
 	if !ok {
@@ -24,9 +28,11 @@ func Rename(args Args, config cfg.Config) resp.Val {
 	}
 
 	ExpireRecordLock.Lock()
-	exp := ExpireRecord[key]
+	exp, ok := ExpireRecord[key]
 	delete(ExpireRecord, key)
-	ExpireRecord[newkey] = exp
+	if ok {
+		ExpireRecord[newkey] = exp
+	}
 	ExpireRecordLock.Unlock()
 
 	return resp.NewString("OK")

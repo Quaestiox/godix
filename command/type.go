@@ -34,8 +34,8 @@ func (sv *sv) Expire() time.Time {
 }
 
 func (sv *sv) setExpire(duration time.Duration) {
-	
+
 	sv.expire = time.Now().Add(duration)
 }
 
-var WRCommand = []string{"SET", "HSET"}
+var WRCommand = []string{"SET", "HSET", "RENAME", "DEL", "HDEL", "EXPIRE"}
