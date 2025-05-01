@@ -17,7 +17,9 @@ func HGet(args Args, config cfg.Config) resp.Val {
 	hash := args[0].Value().(string)
 	key := args[1].Value().(string)
 
+	HMapLock.RLock()
 	value, ok := HMap[hash][key]
+	HMapLock.RUnlock()
 	if !ok {
 		return resp.NewNullBulk()
 	}

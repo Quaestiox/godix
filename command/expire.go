@@ -4,8 +4,12 @@ import (
 	"github.com/Quaestiox/godix/cfg"
 	"github.com/Quaestiox/godix/resp"
 	"strconv"
+	"sync"
 	"time"
 )
+
+var ExpireRecord = map[string]time.Time{}
+var ExpireRecordLock = sync.RWMutex{}
 
 func Expire(args Args, config cfg.Config) resp.Val {
 	if len(args) != 2 {
@@ -25,9 +29,13 @@ func Expire(args Args, config cfg.Config) resp.Val {
 
 	MapLock.Lock()
 	sv := Map[key]
-	sv.setExpire(time.Duration(duration) * time.Second)
-
+	d := time.Duration(duration) * time.Second
+	sv.setExpire(d)
 	MapLock.Unlock()
+
+	ExpireRecordLock.Lock()
+	ExpireRecord[key] = time.Now().Add(d)
+	ExpireRecordLock.Unlock()
 
 	return resp.NewString("OK")
 

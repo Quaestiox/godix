@@ -2,15 +2,15 @@
 
 Simple redis-like database implemented in Go.
 
-## Support Command
-- ping
+## Support Commands
+
 - echo
 - set
 - get
 - del
+- expire
+- ttl
 - hset
-- hget
-- hdel
 - aof 
   - clean
 

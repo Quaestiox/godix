@@ -12,17 +12,22 @@ import (
 )
 
 var Handlers = map[string]func(command.Args, cfg.Config) resp.Val{
-	"PING":   command.Ping,
-	"SET":    command.Set,
-	"GET":    command.Get,
-	"DEL":    command.Del,
-	"HSET":   command.HSet,
-	"HGET":   command.HGet,
-	"HDEL":   command.HDel,
-	"AOF":    command.AOF,
-	"ABOUT":  command.About,
-	"ECHO":   command.Echo,
-	"EXPIRE": command.Expire,
+	"PING":    command.Ping,
+	"SET":     command.Set,
+	"GET":     command.Get,
+	"DEL":     command.Del,
+	"EXISTS":  command.Exists,
+	"RENAME":  command.Rename,
+	"HSET":    command.HSet,
+	"HGET":    command.HGet,
+	"HDEL":    command.HDel,
+	"HEXISTS": command.HExists,
+	"AOF":     command.AOF,
+	"ABOUT":   command.About,
+	"ECHO":    command.Echo,
+	"EXPIRE":  command.Expire,
+	"TTL":     command.TTL,
+	"PTTL":    command.PTTL,
 }
 
 func HandleRequest(value resp.Val, aof *persistence.AOF) (resp.Val, error) {
@@ -66,7 +71,7 @@ func HandleAOF(aof *persistence.AOF) error {
 }
 
 func HandleExpire() {
-	ticker := time.NewTicker(time.Second)
+	ticker := time.NewTicker(config.ExpireTick)
 	defer ticker.Stop()
 	for range ticker.C {
 		command.MapLock.Lock()

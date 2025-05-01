@@ -47,6 +47,7 @@ func main() {
 	}
 	defer conn.Close()
 
+	// check keys' expire time
 	go HandleExpire()
 
 	for {
