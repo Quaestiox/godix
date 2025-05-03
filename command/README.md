@@ -4,11 +4,17 @@
 - del
 - exists
 - expire
-- get
 - pttl
 - rename
-- set
 - ttl
+
+### String
+- decr
+- decrby
+- get
+- incr
+- incrby
+- set
 
 ### Hash
 - hdel

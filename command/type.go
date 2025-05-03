@@ -2,6 +2,7 @@ package command
 
 import (
 	"github.com/Quaestiox/godix/resp"
+	"sync"
 	"time"
 )
 
@@ -33,9 +34,21 @@ func (sv *sv) Expire() time.Time {
 	return sv.expire
 }
 
-func (sv *sv) setExpire(duration time.Duration) {
+func (sv *sv) setValue(s string) {
+	sv.value = s
+}
 
+func (sv *sv) setExpire(duration time.Duration) {
 	sv.expire = time.Now().Add(duration)
 }
 
 var WRCommand = []string{"SET", "HSET", "RENAME", "DEL", "HDEL", "EXPIRE"}
+
+var Map = map[string]*sv{}
+var MapLock = sync.RWMutex{}
+
+var HMap = map[string]map[string]string{}
+var HMapLock = sync.RWMutex{}
+
+var LMap = map[string][]string{}
+var LMapLock = sync.RWMutex{}

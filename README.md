@@ -15,3 +15,9 @@ Default port is 6379. You can change the port by argument `port`:
 ```cmd
 ./godix -port=6666
 ```
+
+## The differences from redis
+
+Keys of different types are stored separately. This means that you can have both a list called 'foo' and a hash at the same time.
+
+Have some commands unique to godix.

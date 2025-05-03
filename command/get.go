@@ -7,7 +7,7 @@ import (
 
 func Get(args Args, config cfg.Config) resp.Val {
 	if len(args) != 1 {
-		return resp.NewError("ERR", "wrong number of arguments for 'set' command.")
+		return resp.NewError("ERR", "wrong number of arguments for 'get' command.")
 	}
 	key := args[0]
 	MapLock.RLock()

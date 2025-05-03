@@ -28,6 +28,12 @@ var Handlers = map[string]func(command.Args, cfg.Config) resp.Val{
 	"EXPIRE":  command.Expire,
 	"TTL":     command.TTL,
 	"PTTL":    command.PTTL,
+	"INCR":    command.Incr,
+	"INCRBY":  command.IncrBy,
+	"DECR":    command.Decr,
+	"DECRBY":  command.DecrBy,
+	"LINDEX":  command.LIndex,
+	"LPUSH":   command.LPush,
 }
 
 func HandleRequest(value resp.Val, aof *persistence.AOF) (resp.Val, error) {

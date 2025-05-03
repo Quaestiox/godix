@@ -3,12 +3,7 @@ package command
 import (
 	"github.com/Quaestiox/godix/cfg"
 	"github.com/Quaestiox/godix/resp"
-	"sync"
 )
-
-// var Map = map[string]string{}
-var Map = map[string]*sv{}
-var MapLock = sync.RWMutex{}
 
 func Set(args Args, config cfg.Config) resp.Val {
 	if len(args) != 2 {
