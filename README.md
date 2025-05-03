@@ -1,6 +1,6 @@
 # GODIX
 
-Simple redis-like database implemented in Go.
+Redis-like database server implemented in Go.
 
 ## Supported Commands
 

@@ -22,6 +22,18 @@
 - hset
 - hexists
 
+## List
+- lindex
+- llen
+- lpop
+- lpush
+
+## Set
+- sadd
+- scard
+- smemebers
+- srem
+
 ### Persistence
 - aof
   - clean
