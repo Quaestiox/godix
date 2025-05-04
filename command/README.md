@@ -18,19 +18,29 @@
 
 ### Hash
 - hdel
-- hget
-- hset
 - hexists
+- hget
+- hgetall
+- hincrby
+- hkeys
+- hlen
+- hset
+- hvals
 
 ### List
 - lindex
 - llen
 - lpop
 - lpush
+- lrange
+- lrem
+- rpop
+- rpush
 
 ### Set
 - sadd
 - scard
+- sismember
 - smemebers
 - srem
 

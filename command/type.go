@@ -42,7 +42,11 @@ func (sv *sv) setExpire(duration time.Duration) {
 	sv.expire = time.Now().Add(duration)
 }
 
-var WRCommand = []string{"SET", "HSET", "RENAME", "DEL", "HDEL", "EXPIRE", "LPUSH", "LPOP", "SADD", "SREM"}
+var WRCommand = []string{"SET", "DEL", "EXPIRE", "RENAME", "INCRBY", "INCR", "DECRBY", "DECR",
+	"HSET", "HINCRBY", "HDEL",
+	"LPUSH", "RPUSH", "LPOP", "RPOP", "LREM",
+	"SADD", "SREM",
+}
 
 var Map = map[string]*sv{}
 var MapLock = sync.RWMutex{}

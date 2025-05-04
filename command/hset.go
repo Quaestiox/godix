@@ -6,24 +6,35 @@ import (
 )
 
 func HSet(args Args, config cfg.Config) resp.Val {
-	if len(args) != 3 {
+	if len(args) < 3 || len(args)%2 != 1 {
 		return resp.NewError("ERR", "wrong number of arguments for 'hset' command.")
 	}
 
-	if args[0].Type() != "bulk" || args[1].Type() != "bulk" || args[2].Type() != "bulk" {
-		return resp.NewError("ERR", "Invalid arguments' format, expected bulk.")
+	if res := expectBulks(args); res != nil {
+		return resp.NewError("ERR", res.Error())
 	}
 
+	kv := []string{}
+	count := 0
 	hash := args[0].Value().(string)
-	key := args[1].Value().(string)
-	value := args[2].Value().(string)
+	for idx, v := range args {
+		if idx > 0 {
+			kv = append(kv, v.Value().(string))
+		}
+	}
 
 	HMapLock.Lock()
 	if _, ok := HMap[hash]; !ok {
 		HMap[hash] = map[string]string{}
 	}
-	HMap[hash][key] = value
+	for i := 0; i < len(args)-1; {
+		if _, ok := HMap[hash][kv[i]]; !ok {
+			count++
+		}
+		HMap[hash][kv[i]] = kv[i+1]
+		i += 2
+	}
 	HMapLock.Unlock()
 
-	return resp.NewString("OK")
+	return resp.NewInteger(count)
 }

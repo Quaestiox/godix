@@ -5,9 +5,9 @@ import (
 	"github.com/Quaestiox/godix/resp"
 )
 
-func LPush(args Args, config cfg.Config) resp.Val {
+func RPush(args Args, config cfg.Config) resp.Val {
 	if len(args) < 2 {
-		return resp.NewError("ERR", "wrong number of arguments for 'lpush' command.")
+		return resp.NewError("ERR", "wrong number of arguments for 'rpush' command.")
 	}
 
 	if res := expectBulks(args); res != nil {
@@ -16,7 +16,7 @@ func LPush(args Args, config cfg.Config) resp.Val {
 
 	list := args[0].Value().(string)
 	el := []string{}
-	for i := len(args) - 1; i >= 1; i-- {
+	for i := 1; i < len(args); i++ {
 		el = append(el, args[i].Value().(string))
 	}
 
@@ -25,7 +25,7 @@ func LPush(args Args, config cfg.Config) resp.Val {
 	if !ok {
 		LMap[list] = []string{}
 	}
-	LMap[list] = append(el, LMap[list]...)
+	LMap[list] = append(LMap[list], el...)
 
 	LMapLock.Unlock()
 
