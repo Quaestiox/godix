@@ -6,16 +6,16 @@ import (
 	"strconv"
 )
 
-func LRange(args Args, config cfg.Config) resp.Val {
+func GetRange(args Args, config cfg.Config) resp.Val {
 	if len(args) != 3 {
-		return resp.NewError("ERR", "wrong number of arguments for 'lrange' command.")
+		return resp.NewError("ERR", "wrong number of arguments for 'getrange' command.")
 	}
 
 	if res := expectBulks(args); res != nil {
 		return resp.NewError("ERR", res.Error())
 	}
 
-	list := args[0].Value().(string)
+	key := args[0].Value().(string)
 	v1 := args[1].Value().(string)
 	v2 := args[2].Value().(string)
 	start, err1 := strconv.Atoi(v1)
@@ -25,16 +25,17 @@ func LRange(args Args, config cfg.Config) resp.Val {
 		return resp.NewError("ERR", "argument should be integers")
 	}
 
-	res := []resp.Val{}
+	res := ""
 
-	LMapLock.RLock()
+	MapLock.RLock()
 
-	l, ok := LMap[list]
+	l, ok := Map[key]
+	v := l.value
 	if !ok {
-		LMapLock.RUnlock()
-		return resp.NewArray(res...)
+		MapLock.RUnlock()
+		return resp.NewBulk(res)
 	}
-	length := len(l)
+	length := len(v)
 	if start < 0 {
 		start = length + start
 	}
@@ -42,13 +43,13 @@ func LRange(args Args, config cfg.Config) resp.Val {
 		end = length + end
 	}
 	if start > end {
-		LMapLock.RUnlock()
-		return resp.NewArray(res...)
+		MapLock.RUnlock()
+		return resp.NewBulk(res)
 	}
 	for i := start; i <= end; i++ {
-		res = append(res, resp.NewBulk(l[i]))
+		res += string(v[i])
 	}
-	LMapLock.RUnlock()
+	MapLock.RUnlock()
 
-	return resp.NewArray(res...)
+	return resp.NewBulk(res)
 }

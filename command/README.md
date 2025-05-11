@@ -4,6 +4,7 @@
 - del
 - exists
 - expire
+- persist
 - pttl
 - rename
 - ttl
@@ -12,6 +13,7 @@
 - decr
 - decrby
 - get
+- getrange
 - incr
 - incrby
 - set

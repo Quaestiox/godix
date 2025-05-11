@@ -50,6 +50,8 @@ var Handlers = map[string]func(command.Args, cfg.Config) resp.Val{
 	"HGETALL":   command.HGetAll,
 	"HINCRBY":   command.HIncrBy,
 	"HLEN":      command.HLen,
+	"PERSIST":   command.Persist,
+	"GETRANGE":  command.GetRange,
 }
 
 func HandleRequest(value resp.Val, aof *persistence.AOF) (resp.Val, error) {
